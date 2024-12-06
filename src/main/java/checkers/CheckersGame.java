@@ -9,9 +9,12 @@ public class CheckersGame extends JFrame {
     private JLabel statusLabel;
     private JButton resetButton;
 
+    /**
+     * Constructs a new CheckersGame object
+     */
     public CheckersGame() {
-        setTitle("Checkers Game");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Checkers Game"); //creates the game window
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//closes the game if the window is closed
         setLayout(new BorderLayout(10, 10));
         
         // Initialize game components
@@ -52,6 +55,7 @@ public class CheckersGame extends JFrame {
             }
         });
         
+        //updates the position of a dragged piece
         board.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -67,6 +71,9 @@ public class CheckersGame extends JFrame {
         setResizable(false);
     }
     
+    // Handles clicks on the game board
+    // if the player clicks on a piece, it selects it
+    // if the player clicks on an empty space, it moves the selected piece
     private void handleBoardClick(int x, int y) {
         if (!board.selectPiece(x, y)) {
             if (board.movePiece(x, y)) {
@@ -75,6 +82,7 @@ public class CheckersGame extends JFrame {
         }
     }
     
+    // Updates the status label
     private void updateStatus() {
         if (board.hasWon()) {
             String winner = (board.getCurrentPlayer() == Color.RED) ? "Black" : "Red";
@@ -89,12 +97,15 @@ public class CheckersGame extends JFrame {
         }
     }
     
+    //resets the game
     private void resetGame() {
         board.resetBoard();
         statusLabel.setText("Red's Turn");
     }
     
     public static void main(String[] args) {
+        // Start the game
+        //using SwingUtilities.invokeLater to ensure the GUI is created on the Swing thread
         SwingUtilities.invokeLater(() -> {
             CheckersGame game = new CheckersGame();
             game.setVisible(true);

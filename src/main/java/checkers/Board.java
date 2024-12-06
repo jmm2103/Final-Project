@@ -23,16 +23,19 @@ public class Board extends JPanel {
     private static final Color LIGHT_CELL = new Color(255, 228, 181);  // Light brown
     
     // Game state
-    private final Map<Point, Piece> pieces;  // Maps board positions to pieces
+    private final Map<Point, Piece> pieces;  // //the hashMap is telling us where the pieces are
     private Point selectedPiece;             // Currently selected piece
     private List<Point> validMoves;          // Valid moves for selected piece
     private Color currentPlayer;             // Current player's turn
     private Point draggedPiece;              // Piece being dragged
     private Point draggedTo;                 // Current drag position
     
-    /**
-     * Creates a new game board and initializes the pieces
-     */
+   /**
+    * Creates a new game board
+    * Initializes the pieces HashMap to store piece positions
+    * Sets Red as starting player
+    * Sets board size to 8x8 squares
+    */
     public Board() {
         pieces = new HashMap<>();
         validMoves = new ArrayList<>();
@@ -42,7 +45,10 @@ public class Board extends JPanel {
     }
     
     /**
-     * Sets up the initial piece positions
+     * Sets up the initial game state
+     * Places 12 red pieces in top 3 rows
+     * Places 12 black pieces in bottom 3 rows
+     * Pieces only go on dark squares
      */
     private void initializeBoard() {
         pieces.clear();
@@ -63,9 +69,14 @@ public class Board extends JPanel {
         }
     }
     
-    /**
-     * Draws the board and all pieces
-     */
+   /**
+    * Draws the game board and pieces
+    * Draws checkerboard pattern
+    * Highlights valid moves in green
+    * Highlights selected piece in yellow
+    * Draws all pieces in their current positions
+    * Shows dragged piece following mouse
+    */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -154,8 +165,12 @@ public class Board extends JPanel {
         }
     }
     
-    /**
-     * Selects a piece at the given position
+   /**
+    * Selects a piece at given position
+    * Checks if position has a piece
+    * Checks if it's current player's piece
+    * Shows valid moves if selected
+    * Returns true if piece was selected
      */
     public boolean selectPiece(int x, int y) {
         Point boardPos = new Point(x / CELL_SIZE, y / CELL_SIZE);
@@ -171,8 +186,13 @@ public class Board extends JPanel {
     }
     
     /**
-     * Moves a piece to a new position
-     */
+    * Moves selected piece to new position
+    * Checks if move is valid
+    * Handles captures by removing jumped pieces
+    * Promotes to king if reaching opposite end
+    * Changes turn to other player
+    * Returns true if move was successful
+    */
     public boolean movePiece(int x, int y) {
         if (selectedPiece == null) return false;
         
